@@ -194,3 +194,31 @@ if (! function_exists('run')) {
     }
 }
 
+
+use Swoole\Coroutine\WaitGroup;
+
+if (!function_exists('do_parallel')) {
+    function do_parallel(array $calls, int $concurrent = 30): array
+    {
+        $wg = new WaitGroup();
+        $results = [];
+
+        $wg->add(count($calls));
+
+        foreach ($calls as $call) {
+            Coroutine::create(function () use ($wg, $call, &$results) {
+                try {
+                    $results[] = call($call);
+                } catch (\Throwable $e) {
+                    echo '出现并发执行错误: '.$e->getMessage();
+                } finally {
+                    $wg->done();
+                }
+            });
+        }
+
+        $wg->wait();
+
+        return $results ?? [];
+    }
+}
