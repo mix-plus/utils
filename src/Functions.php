@@ -114,10 +114,9 @@ if (! function_exists('go')) {
      * @param callable $callable
      * @return bool|Coroutine
      */
-    function go(callable $callable): Coroutine|bool
+    function go(callable $callable)
     {
-        $id = Coroutine::create($callable);
-        return $id > 0 ? $id : false;
+        return Coroutine::create($callable) ?: false;
     }
 }
 
@@ -128,8 +127,7 @@ if (! function_exists('co')) {
      */
     function co(callable $callable): Coroutine|bool
     {
-        $id = Coroutine::create($callable);
-        return $id > 0 ? $id : false;
+        return Coroutine::create($callable) ?: false;
     }
 }
 
