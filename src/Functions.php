@@ -125,7 +125,7 @@ if (! function_exists('co')) {
      * @param callable $callable
      * @return bool|Coroutine
      */
-    function co(callable $callable): Coroutine|bool
+    function co(callable $callable)
     {
         return Coroutine::create($callable) ?: false;
     }
