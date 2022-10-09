@@ -15,7 +15,10 @@ class Coroutine
      */
     private $callable;
 
-    private ?int $id = null;
+    /**
+     * @var int|null
+     */
+    private  $id = null;
 
 
     public function __construct(callable $callable)
@@ -23,14 +26,14 @@ class Coroutine
         $this->callable = $callable;
     }
 
-    public static function create(callable $callable, ...$data): static
+    public static function create(callable $callable, ...$data)
     {
         $coroutine = new static($callable);
         $coroutine->execute(...$data);
         return $coroutine;
     }
 
-    public function execute(...$data): static
+    public function execute(...$data)
     {
 
         $this->id = SwooleCo::create($this->callable, ...$data);
@@ -90,7 +93,7 @@ class Coroutine
      * @param mixed $data only Support Swow
      * @return bool
      */
-    public static function yield(mixed $data = null): mixed
+    public static function yield($data = null)
     {
         return SwooleCo::yield();
     }
@@ -100,7 +103,7 @@ class Coroutine
      * @param mixed $data only Support Swow
      * @return bool
      */
-    public static function resumeById(int $id, mixed ...$data): mixed
+    public static function resumeById(int $id, ...$data)
     {
         return SwooleCo::resume($id);
     }

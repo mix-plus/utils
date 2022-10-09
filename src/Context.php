@@ -6,9 +6,12 @@ use Closure;
 
 class Context
 {
-    protected static array $nonCoContext = [];
+    /**
+     * @var array
+     */
+    protected static $nonCoContext = [];
 
-    public static function set(string $id, mixed $value, ?int $coroutineId = null): mixed
+    public static function set(string $id, $value, ?int $coroutineId = null)
     {
         if (Coroutine::id() > 0) {
             Coroutine::getContextFor($coroutineId)[$id] = $value;
@@ -19,7 +22,7 @@ class Context
         return $value;
     }
 
-    public static function get(string $id, mixed $default = null, ?int $coroutineId = null): mixed
+    public static function get(string $id, $default = null, ?int $coroutineId = null)
     {
         if (Coroutine::id() > 0) {
             return Coroutine::getContextFor($coroutineId)[$id] ?? $default;
@@ -49,7 +52,7 @@ class Context
      * Copy the context from a coroutine to current coroutine.
      * This method will delete the origin values in current coroutine.
      */
-    public static function copy(int $fromCoroutineId, array $keys = []): void
+    public static function copy(int $fromCoroutineId, array $keys = [])
     {
         $from = Coroutine::getContextFor($fromCoroutineId);
 
@@ -71,7 +74,7 @@ class Context
     /**
      * Retrieve the value and override it by closure.
      */
-    public static function override(string $id, Closure $closure, ?int $coroutineId = null): mixed
+    public static function override(string $id, Closure $closure, ?int $coroutineId = null)
     {
         $value = null;
 
@@ -89,7 +92,7 @@ class Context
     /**
      * Retrieve the value and store it if not exists.
      */
-    public static function getOrSet(string $id, mixed $value, ?int $coroutineId = null): mixed
+    public static function getOrSet(string $id, $value, ?int $coroutineId = null)
     {
         if (! self::has($id, $coroutineId)) {
             return self::set($id, value($value), $coroutineId);
